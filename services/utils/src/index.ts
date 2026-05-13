@@ -2,11 +2,20 @@ import express from "express";
 
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
+import cors from "cors";
+
+import uploadRoutes from "./routes/cloudinary";
 
 dotenv.config();
 
 
+
 const app = express();
+
+app.use(cors())
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 const { CLOUD_NAME, CLOUD_API_KEY, CLOUD_SECRET_KEY } = process.env;
 
@@ -22,6 +31,8 @@ cloudinary.v2.config({
     api_secret: CLOUD_SECRET_KEY
 });
 
+
+app.use("/api", uploadRoutes);
 const PORT = process.env.PORT || 5002;
 
 app.listen(PORT, () => {

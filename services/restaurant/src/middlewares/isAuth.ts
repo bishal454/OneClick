@@ -130,4 +130,28 @@ export const isAuth = async (
             message: "Please login -jwt error."
         })
     }
-}
+};
+
+
+export const isSeller = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+
+    const user = req.user;
+
+    if (user && user.role !== "seller") {
+
+        res.status(401).json({
+            message: "Your are not authorized seller",
+
+        });
+        return;
+
+    }
+    next();
+
+
+};
+

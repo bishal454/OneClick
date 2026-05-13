@@ -33,11 +33,19 @@ import Navbar from './components/navbar';
 // WHY: We need the Account page component where users can view their profile and log out.
 // WHAT: Importing the Account page component from the pages directory.
 import Account from './pages/Account';
+import { UseAppData } from './context/AppContext'
+import Restaurant from './pages/Restaurant'
 
 
 // WHY: We need a root component that defines the entire application structure, routing, and layout.
 // WHAT: Defining the App functional component that returns the complete app layout with routing.
 const App = () => {
+
+  const { user } = UseAppData()
+
+  if (user && user.role === "seller") {
+    return <Restaurant />;
+  }
   // WHY: The component must return JSX that defines the visual structure and routing of the application.
   // WHAT: Returning a React Fragment containing the router, routes, and global components.
   return (

@@ -26,6 +26,10 @@ export interface IUser {
     // WHY: Users must select a role (customer, rider, seller) after first login to determine their app experience.
     // WHAT: Declaring the role field as a string property (starts as null until the user selects one).
     role: string,
+
+    resturantId: string,
+
+
 }
 
 

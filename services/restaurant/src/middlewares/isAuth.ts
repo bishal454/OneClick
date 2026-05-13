@@ -27,7 +27,7 @@ export interface IUser {
     // WHAT: Declaring the role field as a string property (starts as null until the user selects one).
     role: string,
 
-    resturantId: string,
+    restaurantId?: string;
 
 
 }
@@ -148,7 +148,7 @@ export const isSeller = async (
     if (user && user.role !== "seller") {
 
         res.status(401).json({
-            message: "Your are not authorized seller",
+            message: "You are not an authorized seller",
 
         });
         return;

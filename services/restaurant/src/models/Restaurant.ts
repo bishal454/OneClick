@@ -17,7 +17,7 @@ export interface IRestaurant extends Document {
     }
     isOpen: boolean;
     createdAt: Date;
-    updatedAt: Date;
+
 }
 
 

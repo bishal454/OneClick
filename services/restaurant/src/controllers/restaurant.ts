@@ -77,6 +77,8 @@ export const addRestaurant = TryCatch(async (req: AuthenticatedRequest, res) => 
             coordinates: [Number(longitude), Number(latitude)],
             formattedAddress,
         },
+        isVerified: false,
+
 
 
 
@@ -108,7 +110,7 @@ export const fetchMyRestaurant = TryCatch(
             });
         }
 
-        if (!req.user.resturantId) {
+        if (!req.user.restaurantId) {
             const token = jwt.sign(
                 {
                     user: {
@@ -116,7 +118,7 @@ export const fetchMyRestaurant = TryCatch(
                         restaurantId: restaurant._id,
                     }
                 }, process.env.JWT_SEC as string, {
-                expiresIn: "15"
+                expiresIn: "15d"
             });
             return res.json({ restaurant, token })
 

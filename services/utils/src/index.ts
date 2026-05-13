@@ -1,10 +1,10 @@
 import express from "express";
 
 import dotenv from "dotenv";
-import cloudinary from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
 
-import uploadRoutes from "./routes/cloudinary";
+import uploadRoutes from "./routes/cloudinary.js";
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ if (!CLOUD_NAME || !CLOUD_API_KEY || !CLOUD_SECRET_KEY) {
 }
 
 
-cloudinary.v2.config({
+cloudinary.config({
     cloud_name: CLOUD_NAME,
     api_key: CLOUD_API_KEY,
     api_secret: CLOUD_SECRET_KEY

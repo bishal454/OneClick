@@ -152,7 +152,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                     data.address.village ||
                     "Your Location"
                 );
-
+                setLoadingLocation(false);
                 // WHY: If reverse geocoding fails, we still have the coordinates and should set them with a fallback address.
                 // WHAT: Catching the error and setting location with coordinates and a generic fallback address string.
             } catch (error) {
@@ -163,7 +163,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                 });
                 // WHY: Even if geocoding fails, we should display something meaningful instead of the "Fetching" message.
                 // WHAT: Setting the city to a generic "Your Location" fallback string.
-                setCity("Your Location");
+                setCity("failed to fetch location");
+                setLoadingLocation(false);
             }
 
         });

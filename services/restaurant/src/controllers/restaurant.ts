@@ -104,7 +104,7 @@ export const fetchMyRestaurant = TryCatch(
 
         if (!restaurant) {
             return res.status(404).json({
-                message: "Invalid User."
+                message: "No Restaurant Found."
             });
         }
 

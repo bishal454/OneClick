@@ -26,6 +26,7 @@ import { AppProvider } from './context/AppContext.tsx'
 // WHY: We need a base URL for the auth service API so all HTTP requests can reference it consistently.
 // WHAT: Exporting the auth service URL as a constant so components can import it for making API calls to the backend.
 export const authService = "http://localhost:5000";
+export const restaurantService = "http://localhost:5001";
 
 // WHY: We need to mount the React application into the HTML element with id "root" in index.html.
 // WHAT: Calling createRoot on the root DOM element (with ! to assert it's not null) and rendering the component tree.

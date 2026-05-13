@@ -81,3 +81,27 @@ export interface AppContextType {
     // WHAT: Declaring the city field as a string that holds the user's city name from reverse geocoding.
     city: string;
 }
+
+
+
+
+export interface IRestaurant {
+    _id: string;
+    name: string;
+
+    description?: string;
+    phone: number;
+    images: string;
+    ownerId: string;
+    isVerified: boolean;
+
+    autoLocation: {
+        type: "Point",
+        coordinates: [number, number],
+        formattedAddress: string;
+
+    }
+    isOpen: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}

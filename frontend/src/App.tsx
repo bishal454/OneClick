@@ -84,7 +84,7 @@ const App = () => {
         </Routes>
         {/* WHY: The Toaster component needs to be present in the DOM to render toast notifications triggered anywhere in the app. */}
         {/* WHAT: Rendering the Toaster component from react-hot-toast to display success/error toast messages globally. */}
-        <Toaster />
+
       </BrowserRouter >
     </>
   );

@@ -67,6 +67,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
 
             onUpdate(data.restaurant)
             toast.success(data.message)
+            setEditMode(false);
 
 
         }

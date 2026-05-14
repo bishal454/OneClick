@@ -13,6 +13,7 @@ import { authService } from "../main";
 // WHY: We need TypeScript type definitions for the context value, user data, and location data.
 // WHAT: Importing the AppContextType, User, and LocationData interfaces for type safety in state and context.
 import type { AppContextType, User, LocationData } from "../types";
+import { Toaster } from "react-hot-toast";
 
 
 // WHY: We need a React Context to share global state (user, auth, location) across all components without prop drilling.
@@ -182,6 +183,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         {/* WHY: The children are all the components wrapped by AppProvider that need access to the context. */}
         {/* WHAT: Rendering the children components inside the provider so they can consume the context. */}
         {children}
+        <Toaster />
     </AppContext.Provider>
 };
 

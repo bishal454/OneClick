@@ -127,10 +127,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
             // WHAT: Starting a try block to attempt converting coordinates into a human-readable address.
             try {
                 // WHY: We need to convert GPS coordinates into a human-readable address (city, street, etc.).
-                // WHAT: Making a fetch request to OpenStreetMap's Nominatim reverse geocoding API with the user's coordinates.
+                // WHAT: Making a fetch request to OpenStreetMap's Nominatim reverse geocoding API with the user's coordinates and an identifier email to comply with usage policy.
                 const res = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&email=oneclick@example.com`
                 );
+
+                // WHY: The API can return 429 (Too Many Requests) or other errors that should be caught.
+                // WHAT: Checking if the response is not OK and throwing an error to trigger the fallback logic.
+                if (!res.ok) throw new Error("Location fetch failed");
 
                 // WHY: The API returns JSON data containing the address components, so we need to parse it.
                 // WHAT: Parsing the response body as JSON to extract the address data.
@@ -162,8 +166,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                     formattedAddress: "Current Location",
                 });
                 // WHY: Even if geocoding fails, we should display something meaningful instead of the "Fetching" message.
-                // WHAT: Setting the city to a generic "Your Location" fallback string.
-                setCity("failed to fetch location");
+                // WHAT: Setting the city to a generic "Your Location" fallback string instead of an error message.
+                setCity("Your Location");
                 setLoadingLocation(false);
             }
 

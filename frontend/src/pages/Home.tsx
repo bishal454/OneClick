@@ -81,7 +81,7 @@ const Home = () => {
     }, [location, search]);
     if (loading || !location) {
         return <div className="flex h-[60vh] items-center justify-center ">
-            <p className="text-gray-500">Finding restaurants .</p>
+            <p className="text-gray-500">Finding restaurants  in your area...</p>
         </div>
     }
     return (

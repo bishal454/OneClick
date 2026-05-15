@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { IMenuItem } from "../types"
 import axios from "axios";
 import { restaurantService } from "../main";
-import { BsCart, BsEye } from "react-icons/bs";
+import { BsCartPlus, BsEye } from "react-icons/bs";
 import { FiEyeOff } from "react-icons/fi";
 import { BiTrash } from "react-icons/bi";
 import { VscLoading } from "react-icons/vsc";
@@ -131,7 +131,7 @@ const MenuItems = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
 
                                     ) :
                                         (
-                                            <BsCart size={18} />
+                                            <BsCartPlus size={18} />
 
                                         )}
                                 </button>

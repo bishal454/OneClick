@@ -1,16 +1,136 @@
+import { useSearchParams } from "react-router-dom";
+import { UseAppData } from "../context/AppContext"
+import { useEffect, useState } from "react";
+import type { IRestaurant } from "../types";
+import axios from "axios";
+import { restaurantService } from "../main";
+import RestaurantCard from "../components/RestaurantCard";
 
-// WHY: We need a Home page component to serve as the main landing page for authenticated users.
-// WHAT: Defining the Home functional component that renders the home page content.
+
 const Home = () => {
-    // WHY: The component must return JSX that defines the visual content of the home page.
-    // WHAT: Returning a simple div with the text "Home" as a placeholder for future home page content.
+
+    const { location } = UseAppData();
+    const [searchParams] = useSearchParams();
+
+    const search = searchParams.get("search") || "";
+    const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
+
+    const [loading, setLoading] = useState(true);
+
+
+    const getDistancekm = (
+        lat1: number,
+        lon1: number,
+        lat2: number,
+        lon2: number,
+    ): number => {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = (R * c).toFixed(2);
+        return +distance
+
+
+    };
+
+    const fetchRestaurants = async () => {
+        if (!location?.latitude || !location?.longitude) {
+            // alert("You need to give permission of your location to access.");
+            return;
+
+        }
+        try {
+            setLoading(true);
+
+            const { data } = await axios.get(
+                `${restaurantService}/api/restaurant/all`,
+                {
+                    params: {
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                        search,
+
+                    },
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            )
+            setRestaurants(data.restaurants ?? []);
+
+
+
+        } catch (error) {
+            console.log(error);
+
+        }
+        finally {
+            setLoading(false);
+
+        }
+    }
+
+    useEffect(() => {
+        fetchRestaurants();
+
+    }, [location, search]);
+    if (loading || !location) {
+        return <div className="flex h-[60vh] items-center justify-center ">
+            <p className="text-gray-500">Finding restaurants .</p>
+        </div>
+    }
     return (
-        // WHY: A div wrapper is needed to contain the home page content and apply layout styles later.
-        // WHAT: Rendering a div element with the text "Home" as the initial placeholder content.
-        <div>Home</div>
+
+        <div className=" mx-auto max-w-7xl px-4 py-6">
+
+
+            {restaurants.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+
+                    {
+
+                        restaurants.map((res) => {
+
+
+                            const [resLng, resLat] = res.autoLocation.coordinates;
+
+                            const distance = getDistancekm(
+                                location.latitude,
+                                location.longitude,
+                                resLat,
+                                resLng
+                            );
+
+                            return (
+                                <RestaurantCard
+                                    key={res._id}
+                                    id={res._id}
+                                    name={res.name}
+                                    description={res.description}
+                                    distance={`${distance}`}
+                                    image={res.images ?? ""}
+                                    isOpen={res.isOpen}
+
+
+
+                                />
+                            )
+                        })
+                    }
+                </div>
+            ) : (
+                <div className="flex h-[40vh] flex-col items-center justify-center space-y-2">
+                    <p className="text-gray-500">No restaurants found in your area.</p>
+                </div>
+            )}
+        </div>
     )
 }
 
-// WHY: The App.tsx route configuration needs to import this component to render it at the "/" path.
-// WHAT: Exporting the Home component as the default export so it can be used in the route definitions.
+
 export default Home

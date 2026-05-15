@@ -35,12 +35,12 @@ import Navbar from './components/navbar';
 import Account from './pages/Account';
 import { UseAppData } from './context/AppContext'
 import Restaurant from './pages/Restaurant'
+import RestaurantPage from './pages/RestaurantPage'
 
 
 // WHY: We need a root component that defines the entire application structure, routing, and layout.
 // WHAT: Defining the App functional component that returns the complete app layout with routing.
 const App = () => {
-
   const { user } = UseAppData()
 
   if (user && user.role === "seller") {
@@ -76,6 +76,7 @@ const App = () => {
             <Route path='/' element={<Home />} />
             {/* WHY: New users without a role need a page to select their role before accessing the full app. */}
             {/* WHAT: Defining the /select-role route that renders the SelectRole page component. */}
+            <Route path="/restaurant/:id" element={<RestaurantPage />} />
             <Route path='/select-role' element={<SelectRole />} />
             {/* WHY: Users need an account page to view their profile, access orders/addresses, and log out. */}
             {/* WHAT: Defining the /account route that renders the Account page component. */}

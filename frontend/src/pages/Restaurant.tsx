@@ -58,9 +58,9 @@ const Restaurant = () => {
 
     const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 
-    const fecthMenuItems = async (restaurantId: string) => {
+    const fetchMenuItems = async (restaurantId: string) => {
         try {
-            const { data } = await axios.get(`${restaurantService}/api/item/all${restaurantId}`, {
+            const { data } = await axios.get(`${restaurantService}/api/item/all/${restaurantId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -68,30 +68,23 @@ const Restaurant = () => {
             setMenuItems(data);
         } catch (error) {
             console.log(error)
-
         }
-
-
     };
-
 
     useEffect(() => {
         if (restaurant?._id) {
-            fecthMenuItems(restaurant._id);
+            fetchMenuItems(restaurant._id);
         }
     }, [restaurant]);
 
+
     if (loading) return (<div className="flex min-h-screen items-center justify-center">
         <p className="text-gray-500">Loading your Restaurant......</p>
-
     </div>
-
     );
     if (!restaurant) {
         return <AddRestaurant fetchMyRestaurant={fetchMyRestaurant} />;
     }
-
-
 
     return (
         <div className="min-h-screen bg-grey-50 px-4 py-6 space-y-6">
@@ -100,14 +93,12 @@ const Restaurant = () => {
                 onUpdate={fetchMyRestaurant}
                 isSeller={true}
             />
-
             <div className="rounnded-xl bg-white shadow-sm">
                 <div className="flex border-b">
                     {[
                         { key: "menu", label: "Menu Items" },
                         { key: "add-item", label: "Add Item" },
                         { key: "sales", label: "Sales" },
-
                     ].map((t) => (
                         <button key={t.key} onClick={() => setTab(t.key as SellerTab)} className={`flex-1 px-4 py-3 text-sm font-medium transition ${tab === t.key ?
                             "border-b-2 border-red-500 text-red-500"
@@ -119,22 +110,26 @@ const Restaurant = () => {
                 </div>
 
                 <div className="p-5">
-                    {tab === "menu" && <MenuItems />}
-                    {tab === "add-item" && <AddMenuItems onItemAdded={() => { }} />}
+                    {tab === "menu" && <MenuItems
+                        items={menuItems}
+                        onItemDeleted={() => fetchMenuItems(restaurant._id)}
+                        isSeller={true}
+
+
+                    />}
+                    {tab === "add-item" && <AddMenuItems onItemAdded={() => fetchMenuItems(restaurant._id)} />}
+
+
                     {tab === "sales" && <p>Sales Page.</p>}
 
-
                 </div>
-
-
-
-
-
 
             </div>
 
         </div>
+
     )
-}
+
+};
 
 export default Restaurant

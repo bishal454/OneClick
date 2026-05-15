@@ -33,7 +33,7 @@ const Navbar = () => {
 
     // WHY: We need the user's auth status to show "Account" or "Login" link, and city name for the location display.
     // WHAT: Destructuring isAuth and city from the global context using the UseAppData hook.
-    const { isAuth, city } = UseAppData();
+    const { isAuth, city, quantity } = UseAppData();
 
     // WHY: We need the current URL path to conditionally show the search bar only on the home page.
     // WHAT: Calling useLocation() to get the current location object which contains the pathname property.
@@ -100,9 +100,10 @@ const Navbar = () => {
                         <CgShoppingCart className="h-6 w-6 text-[#E23744]" />
                         {/* WHY: The badge shows the current cart count so users can see how many items they've added. */}
                         {/* WHAT: Rendering a small red circular badge positioned at the top-right corner of the cart icon with a count of 0. */}
-                        <span className="absolute -top-2 -right-0 flex h-5 w-5 items-center
-             justify-center rounded-full bg-[#E23744] text-xs font-semibold  text-white" >
-                            0
+                        <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center
+             justify-center rounded-full bg-[#E23744] text-xs 
+             font-semibold  text-white" >
+                            {quantity}
                         </span>
                     </Link>
 

@@ -8,11 +8,11 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 // WHY: We need the auth service base URL to construct API endpoint URLs for fetching user data.
 // WHAT: Importing the authService constant which holds the backend server URL (e.g., "http://localhost:5000").
-import { authService } from "../main";
+import { authService, restaurantService } from "../main";
 
 // WHY: We need TypeScript type definitions for the context value, user data, and location data.
 // WHAT: Importing the AppContextType, User, and LocationData interfaces for type safety in state and context.
-import type { AppContextType, User, LocationData } from "../types";
+import { type AppContextType, type User, type LocationData, type ICart } from "../types";
 import { Toaster } from "react-hot-toast";
 
 
@@ -99,11 +99,53 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     }
 
 
+    const [cart, setCart] = useState<ICart[]>([]);
+    const [subTotal, setSubTotal] = useState(0);
+    const [quantity, setQuantity] = useState(0);
+
+    async function fetchCart() {
+        if (!user || user.role !== "customer") return;
+
+
+        try {
+            const { data } = await axios.get(`${restaurantService}/api/cart/all`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+            });
+
+            setCart(data.cart || []);
+            setSubTotal(data.subtotal || 0);
+            setQuantity(data.cartLength)
+
+
+        } catch (error) {
+            console.log(error)
+
+        }
+
+
+    }
+
+
+
+
+
+
     // WHY: We need to fetch the user's profile when the app first mounts to check if they're already logged in.
     // WHAT: Using useEffect with an empty dependency array to call fetchUser() once when the component first renders.
     useEffect(() => {
         fetchUser();
     }, []);
+
+    useEffect(() => {
+        if (user && user.role === "customer") {
+
+            fetchCart();
+        }
+
+
+    }, [user]);
 
     // WHY: We need to get the user's geographic location when the app loads for location-based features.
     // WHAT: Using useEffect with an empty dependency array to request geolocation once when the component first mounts.
@@ -179,7 +221,23 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
     // WHY: We need to provide all the global state values and setters to the component tree via Context.
     // WHAT: Returning the AppContext.Provider with all state values and setters as the context value, wrapping children.
-    return <AppContext.Provider value={{ isAuth, loading, setIsAuth, setLoading, setUser, user, location, loadingLocation, city }}>
+    return <AppContext.Provider value={{
+        isAuth,
+        loading,
+        setIsAuth,
+        setLoading,
+        setUser,
+        user,
+        location,
+        loadingLocation,
+        city,
+        cart,
+        fetchCart,
+        quantity,
+        subTotal,
+
+
+    }}>
         {/* WHY: The children are all the components wrapped by AppProvider that need access to the context. */}
         {/* WHAT: Rendering the children components inside the provider so they can consume the context. */}
         {children}

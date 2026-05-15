@@ -80,6 +80,12 @@ export interface AppContextType {
     // WHY: Components like the Navbar need the city name to display the user's current location.
     // WHAT: Declaring the city field as a string that holds the user's city name from reverse geocoding.
     city: string;
+
+    cart: ICart[] | null;
+
+    fetchCart: () => Promise<void>;
+    subTotal: number;
+    quantity: number;
 }
 
 
@@ -118,4 +124,15 @@ export interface IMenuItem {
     isAvailable: boolean;
     createdAt: Date;
     updatedAt: Date;
+}
+
+
+export interface ICart {
+    userId: string;
+    restaurantId: string | IRestaurant;
+    itemId: string | IMenuItem;
+    quantity: number;
+    createdAt: Date;
+    updatedAt: Date;
+
 }

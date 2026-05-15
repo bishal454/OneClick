@@ -16,7 +16,7 @@ export const addMenuItem = TryCatch(async (req: AuthenticatedRequest, res) => {
 
     }
 
-    const restaurant = await Restaurant.findOne({ OwnerId: req.user._id })
+    const restaurant = await Restaurant.findOne({ ownerId: req.user._id })
 
     if (!restaurant) {
         return res.status(404).json({
@@ -80,3 +80,139 @@ export const addMenuItem = TryCatch(async (req: AuthenticatedRequest, res) => {
 
 
 });
+
+export const getAllItems = TryCatch(async (req: AuthenticatedRequest, res) => {
+
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            message: "Id is required",
+
+        });
+
+    }
+
+    const items = await MenuItems.find({ restaurantId: id })
+
+    res.json(items)
+
+
+});
+
+export const deleteMenuItem = TryCatch(async (req: AuthenticatedRequest, res) => {
+
+
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please Login",
+
+        });
+
+    }
+
+    const { itemId } = req.params;
+    if (!itemId) {
+        return res.status(400).json({
+            message: "Id is required",
+
+        });
+
+    }
+
+
+
+    const item = await MenuItems.findById(itemId)
+
+    if (!item) {
+
+        return res.status(404).json({
+            message: "Item not found",
+
+        });
+    }
+
+    const restaurant = await Restaurant.findOne({
+        _id: item.restaurantId,
+
+        ownerId: req.user._id
+    })
+
+    if (!restaurant) {
+
+        return res.status(404).json({
+            message: "No Restaurant found ",
+
+        });
+
+    }
+
+    await item.deleteOne();
+    res.json({
+        message: "Menu item deleted successfully",
+
+    });
+
+
+});
+
+export const toggleMenuItemAvailaiblity = TryCatch(async (req: AuthenticatedRequest, res) => {
+
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please Login",
+
+        });
+
+    }
+
+    const { itemId } = req.params;
+    if (!itemId) {
+        return res.status(400).json({
+            message: "Id is required",
+
+        });
+
+    }
+
+
+
+    const item = await MenuItems.findById(itemId)
+
+    if (!item) {
+
+        return res.status(404).json({
+            message: "Item not found",
+
+        });
+    }
+
+    const restaurant = await Restaurant.findOne({
+        _id: item.restaurantId,
+
+        ownerId: req.user._id
+    })
+
+    if (!restaurant) {
+
+        return res.status(404).json({
+            message: "No Restaurant found ",
+
+        });
+
+    }
+
+    item.isAvailable = !item.isAvailable;
+    await item.save();
+
+    res.json({
+        message: `Item Marked as ${item.isAvailable ? "Available" : "Unavailable"
+            }`,
+        item,
+
+    })
+
+
+})
+
+
+

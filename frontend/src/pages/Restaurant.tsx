@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import type { IRestaurant } from "../types";
+import { type IMenuItem, type IRestaurant } from "../types";
 import { restaurantService } from "../main";
 import axios from "axios";
 import AddRestaurant from "../components/AddRestaurant";
 import RestaurantProfile from "../components/RestaurantProfile";
+import MenuItems from "../components/MenuItems";
+import AddMenuItems from "../components/AddMenuItems";
 
 type SellerTab = "menu" | "add-item" | "sales";
 
@@ -54,7 +56,30 @@ const Restaurant = () => {
 
     }, []);
 
+    const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 
+    const fecthMenuItems = async (restaurantId: string) => {
+        try {
+            const { data } = await axios.get(`${restaurantService}/api/item/all${restaurantId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            setMenuItems(data);
+        } catch (error) {
+            console.log(error)
+
+        }
+
+
+    };
+
+
+    useEffect(() => {
+        if (restaurant?._id) {
+            fecthMenuItems(restaurant._id);
+        }
+    }, [restaurant]);
 
     if (loading) return (<div className="flex min-h-screen items-center justify-center">
         <p className="text-gray-500">Loading your Restaurant......</p>
@@ -94,8 +119,8 @@ const Restaurant = () => {
                 </div>
 
                 <div className="p-5">
-                    {tab === "menu" && <p>Menu page.</p>}
-                    {tab === "add-item" && <p>Add Item Page.</p>}
+                    {tab === "menu" && <MenuItems />}
+                    {tab === "add-item" && <AddMenuItems onItemAdded={() => { }} />}
                     {tab === "sales" && <p>Sales Page.</p>}
 
 

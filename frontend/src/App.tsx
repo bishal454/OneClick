@@ -38,6 +38,8 @@ import Restaurant from './pages/Restaurant'
 import RestaurantPage from './pages/RestaurantPage'
 import Cart from './pages/Cart'
 
+import AddAddressPage from './pages/Address'
+
 
 // WHY: We need a root component that defines the entire application structure, routing, and layout.
 // WHAT: Defining the App functional component that returns the complete app layout with routing.
@@ -75,6 +77,7 @@ const App = () => {
             {/* WHY: Authenticated users need a home page at the root "/" URL as their main landing page. */}
             {/* WHAT: Defining the "/" route that renders the Home page component. */}
             <Route path='/' element={<Home />} />
+            <Route path='/address' element={<AddAddressPage />} />
             {/* WHY: New users without a role need a page to select their role before accessing the full app. */}
             {/* WHAT: Defining the /select-role route that renders the SelectRole page component. */}
             <Route path="/restaurant/:id" element={<RestaurantPage />} />

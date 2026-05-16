@@ -21,6 +21,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 // WHY: We need the AppProvider to wrap the app with global state (user, auth status, location data).
 // WHAT: Importing the AppProvider component from our context which provides app-wide state management via React Context.
 import { AppProvider } from './context/AppContext.tsx'
+import 'leaflet/dist/leaflet.css';
+
 
 
 // WHY: We need a base URL for the auth service API so all HTTP requests can reference it consistently.

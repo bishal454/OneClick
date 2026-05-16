@@ -36,6 +36,7 @@ import Account from './pages/Account';
 import { UseAppData } from './context/AppContext'
 import Restaurant from './pages/Restaurant'
 import RestaurantPage from './pages/RestaurantPage'
+import Cart from './pages/Cart'
 
 
 // WHY: We need a root component that defines the entire application structure, routing, and layout.
@@ -77,15 +78,14 @@ const App = () => {
             {/* WHY: New users without a role need a page to select their role before accessing the full app. */}
             {/* WHAT: Defining the /select-role route that renders the SelectRole page component. */}
             <Route path="/restaurant/:id" element={<RestaurantPage />} />
+            <Route path="/cart" element={<Cart />} />
             <Route path='/select-role' element={<SelectRole />} />
             {/* WHY: Users need an account page to view their profile, access orders/addresses, and log out. */}
             {/* WHAT: Defining the /account route that renders the Account page component. */}
             <Route path='/account' element={<Account />} />
           </Route>
         </Routes>
-        {/* WHY: The Toaster component needs to be present in the DOM to render toast notifications triggered anywhere in the app. */}
-        {/* WHAT: Rendering the Toaster component from react-hot-toast to display success/error toast messages globally. */}
-
+        <Toaster />
       </BrowserRouter >
     </>
   );

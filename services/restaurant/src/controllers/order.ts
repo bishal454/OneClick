@@ -1,3 +1,5 @@
+
+import axios from "axios";
 import { AuthenticatedRequest } from "../middlewares/isAuth.js";
 import TryCatch from "../middlewares/TryCatch.js";
 import Address from "../models/Address.js";
@@ -232,3 +234,130 @@ export const fetchOrderForPayment = TryCatch(async (req, res) => {
     });
 
 });
+
+
+
+export const fetchRestaurantOrders = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const user = req.user;
+    const { restaurantId } = req.params;
+
+    if (!user) {
+        return res.status(404).json({ message: "Unauthorized" });
+
+    }
+
+    if (!restaurantId) {
+        return res.status(400).json({
+            message: "Restaurant Id is required",
+        });
+
+    }
+
+    if (!user.restaurantId || user.restaurantId !== restaurantId) {
+        return res.status(403).json({
+            message: "Forbidden: You do not own this restaurant",
+        });
+    }
+
+    const limit = req.query.limit ? Number(req.query.limit) : 20;
+
+    const orders = await
+        Order.find({ restaurantId, paymentStatus: "completed" })
+            .sort({ createdAt: -1 })
+            .limit(limit);
+
+
+    return res.json({
+        success: true,
+        count: orders.length,
+        orders,
+    });
+
+});
+
+const ALLOWED_STATUSES = ["placed", "preparing", "ready-for-pickup", "rider-assigned"] as const;
+
+export const updateOrderStatus = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const user = req.user;
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    if (!user) {
+        return res.status(404).json({ message: "Unauthorized" });
+
+    }
+
+    if (!ALLOWED_STATUSES.includes(status)) {
+        return res.status(400).json({
+            message: "Invalid status",
+        });
+    }
+    if (!orderId || !status) {
+        return res.status(400).json({
+            message: "Order Id and status are required",
+        });
+
+    }
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+        return res.status(404).json({
+            message: "Order not found",
+        });
+    }
+
+
+    if (order.paymentStatus !== "completed") {
+        return res.status(400).json({
+            message: "Order is not completed yet",
+        });
+    }
+
+
+    if (!user.restaurantId) {
+        return res.status(403).json({
+            message: "Forbidden: You do not own a restaurant",
+        });
+    }
+
+    const restaurant = await Restaurant.findById(user.restaurantId);
+
+    if (!restaurant) {
+        return res.status(404).json({
+            message: "Restaurant not found",
+        });
+    }
+
+    if (restaurant.ownerId !== user._id.toString()) {
+        return res.status(401).json({
+            message: "You can not update order of another restaurant",
+        });
+    }
+    order.status = status;
+    await order.save();
+
+    await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
+        event: "order:update",
+        room: `user:${order.userId}`,
+        payload: {
+            orderId: order._id,
+            status: order.status
+        }
+
+    },
+        {
+            headers: {
+                "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
+            },
+        }
+    );
+
+    //now assign rider 
+
+
+    return res.json({
+        message: "order status update successfully ",
+        order,
+    });
+
+}); 

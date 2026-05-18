@@ -1,10 +1,14 @@
 import express from "express";
-import { createOrder, fetchOrderForPayment } from "../controllers/order.js";
-import { isAuth } from "../middlewares/isAuth.js";
+import { createOrder, fetchOrderForPayment, fetchRestaurantOrders, updateOrderStatus } from "../controllers/order.js";
+import { isAuth, isSeller } from "../middlewares/isAuth.js";
 
 const router = express.Router();
 
 router.post("/new", isAuth, createOrder);
 router.get("/payment/:id", fetchOrderForPayment);
+
+router.get("/:restaurantId", isAuth, isSeller, fetchRestaurantOrders);
+router.put("/:orderId", isAuth, isSeller, updateOrderStatus);
+
 
 export default router;  

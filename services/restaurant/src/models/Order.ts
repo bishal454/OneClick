@@ -37,7 +37,7 @@ export interface IOrder extends Document {
 
     };
 
-    status: "placed" | "preparing" | "ready-for-pickup" | "rider-assigned" | "picked-up" | "delivered" | "cancelled";
+    status: "placed" | "accepted" | "preparing" | "ready-for-pickup" | "rider-assigned" | "picked-up" | "delivered" | "cancelled";
 
 
     paymentMethod: "razorpay" | "stripe";

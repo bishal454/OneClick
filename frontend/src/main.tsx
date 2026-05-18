@@ -29,6 +29,7 @@ import 'leaflet/dist/leaflet.css';
 // WHAT: Exporting the auth service URL as a constant so components can import it for making API calls to the backend.
 export const authService = "http://localhost:5000";
 export const restaurantService = "http://localhost:5001";
+export const utilsService = "http://localhost:5002";
 
 // WHY: We need to mount the React application into the HTML element with id "root" in index.html.
 // WHAT: Calling createRoot on the root DOM element (with ! to assert it's not null) and rendering the component tree.

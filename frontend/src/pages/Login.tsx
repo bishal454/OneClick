@@ -127,54 +127,34 @@ const Login = () => {
     // WHY: The component must return JSX that defines the visual layout of the login page.
     // WHAT: Returning the JSX structure for the centered login form with Google sign-in button.
     return (
-        // WHY: The login form should be centered both vertically and horizontally on a white background.
-        // WHAT: Rendering a full-height flex container with centered alignment for the login card.
-        <div className="flex min-h-screen items-center justify-center bg-white px-4">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
 
-            {/* WHY: The login card needs a max width and vertical spacing between its child elements. */}
-            {/* WHAT: Rendering a container div with max width of sm and vertical spacing for the login form elements. */}
-            <div className="w-full max-w-sm space-y-6 ">
-                {/* WHY: The app name serves as the brand header on the login page to establish identity. */}
-                {/* WHAT: Rendering the "OneClick" brand name as a centered h1 heading in the app's primary color. */}
-                <h1 className="text-center text-3xl font-bold text-[#E23774]" >
+            <div className="w-full max-w-md bg-white p-8 rounded-2xl border border-slate-100 shadow-xl shadow-slate-100/40 space-y-6">
+                <h1 className="text-center text-4xl font-extrabold text-indigo-600 tracking-tight" >
                     OneClick
                 </h1>
 
-                {/* WHY: A subtitle helps users understand what action they need to take on this page. */}
-                {/* WHAT: Rendering a centered paragraph with instructions to "Login or sign up to continue". */}
-                <p className="text-center text-sm  text-gray-500"    >
+                <p className="text-center text-sm text-slate-500 font-medium">
                     Login or sign up to continue
                 </p>
 
-                {/* WHY: Users need a clickable button to initiate the Google OAuth login flow. */}
-                {/* WHAT: Rendering a styled button that calls googleLogin on click and shows loading state when processing. */}
                 <button onClick={googleLogin} disabled={loading} className="flex w-full items-center 
-                justify-center gap-3 border-xl border border-gray-300 bg-white px-4 py-3">
+                justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shadow-sm">
 
-                    {/* WHY: The Google logo icon makes the button instantly recognizable as a Google sign-in option. */}
-                    {/* WHAT: Rendering the full-color Google logo icon (FcGoogle) at size 20px. */}
                     <FcGoogle size={20} />
-                    {/* WHY: The button text should change based on loading state to give users feedback. */}
-                    {/* WHAT: Conditionally displaying "Signing in..." during loading or "Continue with Google" when idle. */}
                     {
                         loading ? 'Signing in...' : 'Continue with Google'
                     }
                 </button>
 
-                {/* WHY: Legal compliance requires informing users about Terms of Service and Privacy Policy. */}
-                {/* WHAT: Rendering a small text paragraph with links to Terms of Services and Privacy Policy. */}
-                < p className="text-center text-xs text-grey-400">
-                    By continuning , you agree with our {" "}
-                    {/* WHY: The Terms of Service text should be highlighted in the brand color to look like a link. */}
-                    {/* WHAT: Rendering "Terms of Services" in the app's primary pink/red color. */}
-                    <span className="text-[#E23774]">Terms of Services</span>& {" "}
-                    {/* WHY: The Privacy Policy text should also be highlighted to look like a clickable link. */}
-                    {/* WHAT: Rendering "Privacy Policy" in the app's primary pink/red color. */}
-                    <span className="text-[#E23774]">Privacy Policy</span>
+                <p className="text-center text-xs text-slate-400 font-medium leading-relaxed">
+                    By continuing, you agree to our {" "}
+                    <span className="text-indigo-600 font-semibold hover:underline cursor-pointer">Terms of Service</span> and {" "}
+                    <span className="text-indigo-600 font-semibold hover:underline cursor-pointer">Privacy Policy</span>
                 </p>
 
             </div>
-        </div >
+        </div>
     );
 };
 

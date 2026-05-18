@@ -74,10 +74,10 @@ const Cart = () => {
                     alt="Empty Cart"
                     className="h-40 w-40 opacity-50"
                 />
-                <h2 className="text-2xl font-bold text-gray-700">Your cart is empty</h2>
+                <h2 className="text-2xl font-bold text-slate-700">Your cart is empty</h2>
                 <button
                     onClick={() => navigate("/")}
-                    className="rounded-lg bg-[#FF5200] px-6 py-2 font-semibold text-white transition hover:bg-[#e64a00]"
+                    className="rounded-xl bg-indigo-600 px-6 py-3 font-bold text-white shadow-lg shadow-indigo-100 hover:shadow-indigo-200 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
                     Explore Restaurants
                 </button>
@@ -94,14 +94,14 @@ const Cart = () => {
     const isRestaurantOpen = firstItemRestaurant.isOpen;
 
     return (
-        <div className="min-h-screen bg-gray-50 px-4 py-8">
+        <div className="min-h-screen bg-slate-50 px-4 py-8">
             <div className="mx-auto max-w-4xl">
                 <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">My Cart</h1>
+                    <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">My Cart</h1>
                     <button
                         onClick={clearCart}
                         disabled={loading}
-                        className="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium transition"
+                        className="flex items-center gap-2 text-rose-500 hover:text-rose-700 font-semibold transition cursor-pointer"
                     >
                         <AiOutlineDelete size={20} />
                         Clear Cart
@@ -117,9 +117,9 @@ const Cart = () => {
                             return (
                                 <div
                                     key={item._id}
-                                    className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 transition hover:shadow-md"
+                                    className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition hover:shadow-md"
                                 >
-                                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-gray-100">
+                                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-slate-100">
                                         <img
                                             src={menuItem.image}
                                             alt={menuItem.name}
@@ -129,34 +129,34 @@ const Cart = () => {
 
                                     <div className="flex flex-1 flex-col justify-between h-24 py-1">
                                         <div>
-                                            <h3 className="font-bold text-lg text-gray-900 leading-tight">
+                                            <h3 className="font-bold text-lg text-slate-800 leading-tight">
                                                 {menuItem.name}
                                             </h3>
-                                            <p className="text-xs text-gray-500 font-medium mt-1 uppercase tracking-wide">
+                                            <p className="text-xs text-slate-400 font-bold mt-1 uppercase tracking-wide">
                                                 {restaurant.name}
                                             </p>
                                         </div>
 
                                         <div className="flex items-center justify-between mt-2">
-                                            <span className="font-extrabold text-[#FF5200] text-lg">
+                                            <span className="font-extrabold text-indigo-600 text-lg">
                                                 ₹{menuItem.price}
                                             </span>
 
-                                            <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-1 px-3 border border-gray-200">
+                                            <div className="flex items-center gap-3 bg-slate-50 rounded-xl p-1 px-3 border border-slate-200">
                                                 <button
                                                     onClick={() => decrement(menuItem._id)}
                                                     disabled={loading}
-                                                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors text-gray-600"
+                                                    className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600 cursor-pointer"
                                                 >
                                                     <AiOutlineMinus size={14} />
                                                 </button>
-                                                <span className="font-bold text-gray-800 w-4 text-center">
+                                                <span className="font-bold text-slate-800 w-4 text-center">
                                                     {item.quantity}
                                                 </span>
                                                 <button
                                                     onClick={() => increment(menuItem._id)}
                                                     disabled={loading}
-                                                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors text-gray-600"
+                                                    className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600 cursor-pointer"
                                                 >
                                                     <AiOutlinePlus size={14} />
                                                 </button>
@@ -170,28 +170,28 @@ const Cart = () => {
 
                     {/* Summary Card */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-4">
-                            <h2 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-4">
+                            <h2 className="text-xl font-bold text-slate-800 mb-6 pb-4 border-b border-slate-100">
                                 Summary
                             </h2>
-                            <div className="space-y-4">
-                                <div className="flex justify-between text-gray-500 text-sm">
+                            <div className="space-y-4 font-medium">
+                                <div className="flex justify-between text-slate-500 text-sm">
                                     <span>Total Items</span>
-                                    <span className="font-semibold">{totalItems}</span>
+                                    <span className="font-semibold text-slate-800">{totalItems}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
-                                    <span className="font-medium">Subtotal</span>
-                                    <span className="font-bold">₹{subTotal}</span>
+                                <div className="flex justify-between text-slate-600 text-sm">
+                                    <span>Subtotal</span>
+                                    <span className="font-bold text-slate-800">₹{subTotal}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
-                                    <span className="font-medium">Platform Fee</span>
-                                    <span className="font-bold">₹{platformFee}</span>
+                                <div className="flex justify-between text-slate-600 text-sm">
+                                    <span>Platform Fee</span>
+                                    <span className="font-bold text-slate-800">₹{platformFee}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
-                                    <span className="font-medium">Delivery Fee</span>
-                                    <span className="font-bold">
+                                <div className="flex justify-between text-slate-600 text-sm">
+                                    <span>Delivery Fee</span>
+                                    <span className="font-bold text-slate-800">
                                         {deliveryFee === 0 ? (
-                                            <span className="text-green-600">FREE</span>
+                                            <span className="text-emerald-500 font-bold">FREE</span>
                                         ) : (
                                             `₹${deliveryFee}`
                                         )}
@@ -199,32 +199,33 @@ const Cart = () => {
                                 </div>
 
                                 {subTotal < 250 && (
-                                    <div className="bg-orange-50 p-3 rounded-lg border border-orange-100 mt-2">
-                                        <p className="text-xs text-orange-700 leading-relaxed">
-                                            Add <span className="font-bold">₹{250 - subTotal}</span> more to get <span className="font-bold">FREE Delivery</span>!
+                                    <div className="bg-indigo-50/40 p-4 rounded-xl border border-indigo-100/50 mt-2">
+                                        <p className="text-xs text-indigo-700 leading-relaxed font-medium">
+                                            Add <span className="font-bold text-indigo-600">₹{250 - subTotal}</span> more to get <span className="font-bold text-indigo-600">FREE Delivery</span>!
                                         </p>
                                     </div>
                                 )}
 
-                                <div className="pt-4 border-t mt-4">
-                                    <div className="flex justify-between text-xl font-black text-gray-900">
+                                <div className="pt-4 border-t border-slate-100 mt-4">
+                                    <div className="flex justify-between text-lg font-extrabold text-slate-800">
                                         <span>Grand Total</span>
-                                        <span className="text-[#FF5200]">₹{grandTotal}</span>
+                                        <span className="text-indigo-600 font-extrabold text-xl">₹{grandTotal}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <button
+                                onClick={() => navigate("/checkout")}
                                 disabled={!isRestaurantOpen || loading}
-                                className={`w-full py-4 rounded-xl font-bold text-lg mt-8 transition-all shadow-lg shadow-orange-100 active:scale-[0.98] ${isRestaurantOpen
-                                    ? "bg-[#FF5200] text-white hover:bg-[#e64a00]"
-                                    : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
+                                className={`w-full py-4 rounded-xl font-bold text-base mt-8 transition-all shadow-lg active:scale-[0.98] ${isRestaurantOpen
+                                    ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-100 hover:shadow-indigo-200 cursor-pointer"
+                                    : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
                                     }`}
                             >
                                 {isRestaurantOpen ? "Proceed to Checkout" : "Restaurant is Closed"}
                             </button>
 
-                            <p className="text-center text-[10px] text-gray-400 mt-4 font-medium uppercase tracking-widest">
+                            <p className="text-center text-[10px] text-slate-400 mt-4 font-semibold uppercase tracking-widest">
                                 Secure Checkout with OneClick
                             </p>
                         </div>

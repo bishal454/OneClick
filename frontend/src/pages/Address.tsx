@@ -182,10 +182,10 @@ const AddAddressPage = () => {
         }
     };
     return (
-        <div className="mx-auto max-w-4xl px-4 py-6 space-y-6">
-            <h1 className="text-2xl font-bold">Select Delivery Address</h1>
+        <div className="mx-auto max-w-4xl px-4 py-8 space-y-6">
+            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Select Delivery Address</h1>
             {/* 🗺 Map */}
-            <div className="relative h-[400px] w-full overflow-hidden rounded-lg border">
+            <div className="relative h-[400px] w-full overflow-hidden rounded-2xl border border-slate-200 shadow-lg shadow-slate-100/50">
                 <MapContainer
                     center={[latitude || 28.6139, longitude || 77.209]}
                     zoom={13}
@@ -205,7 +205,7 @@ const AddAddressPage = () => {
             </div>
             {/* 📍 Selected address */}
             {formattedAddress && (
-                <div className="rounded-lg border bg-green-50 p-3 text-sm">
+                <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-800 flex items-start gap-2">
                     📍 {formattedAddress}
                 </div>
             )}
@@ -215,13 +215,13 @@ const AddAddressPage = () => {
                 placeholder="Mobile number"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
-                className="w-full rounded-lg border px-4 py-2"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium focus:border-indigo-600 focus:outline-none transition-all duration-200 shadow-sm"
             />
             {/* ➕ Save */}
             <button
                 disabled={adding}
                 onClick={addAddress}
-                className="flex items-center justify-center gap-2 rounded-lg bg-[#E23744] px-4 py-3 text-white hover:bg-[#d32f3a] disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-100 hover:shadow-indigo-200 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
 
             >
                 {adding ? <BiLoader className="animate-spin" /> : <BiPlus />}
@@ -230,25 +230,25 @@ const AddAddressPage = () => {
 
             {/* 📋 Saved Addresses */}
             <div className="space-y-3">
-                <h2 className="text-lg font-semibold">Saved Addresses</h2>
+                <h2 className="text-xl font-bold text-slate-800">Saved Addresses</h2>
                 {loading ? (
-                    <p className="text-sm text-gray-500">Loading...</p>
+                    <p className="text-sm text-slate-500 font-medium">Loading...</p>
                 ) : addresses.length === 0 ? (
-                    <p className="text-sm text-gray-500">No addresses saved</p>
+                    <p className="text-sm text-slate-500 font-medium">No addresses saved</p>
                 ) : (
                     addresses.map((addr) => (
                         <div
                             key={addr._id}
-                            className="flex items-center justify-between rounded-lg border bg-white p-3"
+                            className="flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow duration-200"
                         >
                             <div>
-                                <p className="text-sm font-medium">{addr.formattedAddress}</p>
-                                <p className="text-xs text-gray-500">📞 {addr.mobile}</p>
+                                <p className="text-sm font-semibold text-slate-800">{addr.formattedAddress}</p>
+                                <p className="text-xs text-slate-400 font-bold mt-1">📞 {addr.mobile}</p>
                             </div>
                             <button
                                 onClick={() => deleteAddress(addr._id)}
                                 disabled={deletingId === addr._id}
-                                className="rounded-lg p-2 text-red-500 hover:bg-red-50 disabled:opacity-50"
+                                className="rounded-xl p-2.5 text-rose-500 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50 transition-colors cursor-pointer"
                             >
                                 {deletingId === addr._id ? (
                                     <BiLoader size={16} className="animate-spin" />

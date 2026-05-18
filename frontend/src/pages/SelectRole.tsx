@@ -80,17 +80,19 @@ const SelectRole = () => {
     }
 
     return (
-        < div className="flex min-h-screen item-center justify-center bg-white px-4" >
-            <div className="w-full maxw-sm space-y-6">
-                <h1 className="text-center text-2xl font-bold">Choose your role</h1>
-                <div className="space-y-4">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+            <div className="w-full max-w-md bg-white p-8 rounded-2xl border border-slate-100 shadow-xl shadow-slate-100/40 space-y-6">
+                <h1 className="text-center text-3xl font-extrabold text-slate-800 tracking-tight">Choose your role</h1>
+                <p className="text-center text-sm text-slate-500 font-medium">Select how you want to use OneClick to get started</p>
+                
+                <div className="space-y-3">
                     {
                         roles.map((r) => (
                             <button key={r} onClick={() => setRole(r)} className={`
-                        w-full rounded-xl border px-4 py-3 text-sm font-medium
-                         capitalize transition ${role === r
-                                    ? "border-[#E23744] bg-[#E23744] text-white"
-                                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                        w-full rounded-xl border px-5 py-4 text-sm font-semibold
+                         capitalize transition-all duration-200 cursor-pointer ${role === r
+                                    ? "border-indigo-600 bg-indigo-600 text-white shadow-lg shadow-indigo-100"
+                                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300"
                                 } 
                           `}>
                                 Continue as {r}
@@ -99,12 +101,14 @@ const SelectRole = () => {
                 </div>
 
                 <button disabled={!role} onClick={addRole} className={`w-full rounded-xl 
-                px-4 py-3 text-sm fontsemibold transition ${role ? "border-[#E23744] bg-[#E23744] text-white hover:bg-[#c42936]" : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                px-5 py-4 text-sm font-bold transition-all duration-200 ${role 
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-100 hover:shadow-indigo-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer" 
+                    : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
                     }`}>
                     Next
                 </button>
             </div>
-        </div >
+        </div>
     );
 };
 

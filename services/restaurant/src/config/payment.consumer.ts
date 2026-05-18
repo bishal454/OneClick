@@ -24,11 +24,11 @@ export const startPaymentConsumer = async () => {
             const order = await Order.findOneAndUpdate(
                 {
                     _id: orderId,
-                    paymentStatus: { $ne: "paid" },
+                    paymentStatus: { $ne: "completed" },
                 },
                 {
                     $set: {
-                        paymentStatus: "paid",
+                        paymentStatus: "completed",
                         status: "placed",
                     },
 

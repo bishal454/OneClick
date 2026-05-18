@@ -14,7 +14,9 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
 
     }
 
-    const { paymentMethod, addressId, distance } = req.body
+    const { paymentMethod, addressId } = req.body;
+
+
 
 
     if (!addressId) {
@@ -35,6 +37,33 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
         });
 
     }
+
+
+
+
+    const getDistancekm = (
+        lat1: number,
+        lon1: number,
+        lat2: number,
+        lon2: number,
+    ): number => {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = (R * c).toFixed(2);
+        return +distance
+
+
+    };
+
+
+
+
 
     const cartItems = await Cart.find({ userId: user._id })
         .populate<{ itemId: IMenuItem }>("itemId")
@@ -75,6 +104,14 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
         });
     }
 
+    const [resLng, resLat] = restaurant.autoLocation.coordinates;
+
+    const distance = getDistancekm(
+        address.location.coordinates[1],
+        address.location.coordinates[0],
+        resLat,
+        resLng,
+    );
 
 
 
@@ -113,7 +150,7 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
     const [longitude, latitude] = address.location.coordinates;
 
 
-    const riderAmount = Math.ceil(distance) * 16;
+    const riderAmount = Math.ceil(distance) * 18;
 
     const order = await Order.create({
 
@@ -161,7 +198,7 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
 export const fetchOrderForPayment = TryCatch(async (req, res) => {
 
 
-    if (req.headers["x-internal_key"] !== process.env.INTERNAL_SERVICE_KEY) {
+    if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
         return res.status(403).json({
             message: "Forbidden",
 

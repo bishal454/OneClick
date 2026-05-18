@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import type { IMenuItem, IRestaurant } from "../types";
 import toast from "react-hot-toast";
 import { BiCreditCard, BiLoader } from "react-icons/bi";
+import { loadStripe } from "@stripe/stripe-js";
+
 
 
 interface Address {
@@ -180,6 +182,7 @@ const CheckOut = () => {
 
 
 
+    const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 
     const paywithStripe = async () => {
@@ -188,19 +191,25 @@ const CheckOut = () => {
             setLoadingStripe(true);
             const order = await createOrder("stripe");
             if (!order) return;
-            // const { orderId, amount } = order;
-            // const { data } = await axios.post(`${utilsService}/api/payment/create-stripe-intent`, {
-            // orderId,
-            // });
-            console.log("Stripe checkout", order);
+            const { orderId, amount } = order;
+            try {
+                const stripe = await stripePromise;
+                const { data } = await axios.post(
+                    `${utilsService}/api/payment/stripe/create`,
+                    {
+                        orderId,
+                    });
 
-            // const stripe = await (window as any).Stripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-            // const { error } = await stripe.redirectToCheckout({
-            //    sessionId: data.sessionId,
-            // });
-            //     if (error) {
-            //         toast.error(error.message);
-            //     }
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    toast.error("Failed to create stripe payment  session");
+                }
+
+            } catch (error) {
+                toast.error(" payment Failed");
+
+            }
         }
         catch (error) {
             console.log(error);

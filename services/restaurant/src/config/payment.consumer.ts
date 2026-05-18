@@ -37,7 +37,7 @@ export const startPaymentConsumer = async () => {
                     },
                 },
 
-                { new: true }
+                { returnDocument: 'after' }
             );
 
 

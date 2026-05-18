@@ -54,7 +54,7 @@ export const addToCart = TryCatch(async (req: AuthenticatedRequest, res) => {
 
         },
 
-        { upsert: true, new: true, setDefaultOnInsert: true }
+        { upsert: true, returnDocument: 'after', setDefaultOnInsert: true }
 
 
 
@@ -125,7 +125,7 @@ export const incrementCartItem = TryCatch(async (req: AuthenticatedRequest, res)
     const cartItem = await Cart.findOneAndUpdate(
         { userId, itemId },
         { $inc: { quantity: 1 }, },
-        { new: true }
+        { returnDocument: 'after' }
     );
 
 

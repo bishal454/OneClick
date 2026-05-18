@@ -1,9 +1,14 @@
 import express from "express";
-import { createRazorpayOrder, verifyRazorpayPayment } from "../controllers/payment";
+import { createRazorpayOrder, payWithStripe, verifyRazorpayPayment, verifyStripe } from "../controllers/payment";
 
 const router = express.Router();
+
+
 router.post("/create", createRazorpayOrder);
 router.post("/verify", verifyRazorpayPayment);
 
+router.post("/stripe/create", payWithStripe);
+router.post("/stripe/verify", verifyStripe);
 
-export default router;
+
+export default router;  

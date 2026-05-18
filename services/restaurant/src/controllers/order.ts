@@ -360,4 +360,58 @@ export const updateOrderStatus = TryCatch(async (req: AuthenticatedRequest, res)
         order,
     });
 
-}); 
+});
+
+
+
+export const getMyOrders = TryCatch(async (req: AuthenticatedRequest, res) => {
+
+
+
+    if (!req.user) {
+        return res.status(404).json({ message: "Unauthorized" });
+
+    }
+
+    const orders = await Order.find({
+        userId: req.user._id.toString(),
+        paymentStatus: "completed",
+    })
+        .sort({ createdAt: -1 });
+
+
+    res.json({ orders });
+});
+
+
+
+
+export const fetchSingleOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
+
+
+
+    if (!req.user) {
+        return res.status(404).json({ message: "Unauthorized" });
+
+    }
+
+    const order = await Order.findById(req.params.id);
+
+
+    if (!order) {
+        return res.status(404).json({
+            message: "Order not found",
+        });
+    }
+
+
+    if (order.userId !== req.user._id.toString()) {
+        return res.status(401).json({
+            message: " You do not own this order so you can not fetch it",
+        });
+    }
+
+    res.json({ order });
+});
+
+

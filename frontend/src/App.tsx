@@ -17,11 +17,23 @@ import PaymentSuccess from './pages/PaymentSuccess'
 import OrderSuccess from './pages/OrderSuccess'
 import Orders from './pages/Orders'
 import OrderPage from './pages/OrderPage'
+import RiderDashboard from './pages/RiderDashboard'
 
 
 const App = () => {
-  const { user } = UseAppData()
+  const { user, loading } = UseAppData()
 
+
+  if (loading) {
+    return (
+
+      <h1 className='text-3xl font-bold text-blue-400 text-center mt-56'> Loading ...</h1>
+    )
+  }
+
+  if (user && user.role === "rider") {
+    return <RiderDashboard />;
+  }
   if (user && user.role === "seller") {
     return <Restaurant />;
   }

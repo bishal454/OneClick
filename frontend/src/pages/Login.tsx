@@ -113,9 +113,11 @@ const Login = () => {
         // WHAT: Setting responseGoogle as the callback for successful Google authentication.
         onSuccess: responseGoogle,
 
-        // WHY: When Google login fails, we want to handle the error using the same function for consistent behavior.
-        // WHAT: Setting responseGoogle as the callback for Google authentication errors.
-        onError: responseGoogle,
+        // WHY: When Google login fails, we want to log the error to the console.
+        // WHAT: Setting a custom arrow function that logs the error instead of calling the backend.
+        onError: (error) => {
+            console.log("Google Login Failed/Cancelled:", error);
+        },
 
         // WHY: We use "auth-code" flow because our backend needs the authorization code to exchange for tokens server-side.
         // WHAT: Setting the flow to "auth-code" which returns an authorization code instead of tokens directly.

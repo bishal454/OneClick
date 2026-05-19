@@ -33,7 +33,7 @@ export const loginUser = TryCatch(async (req, res) => {
         });
     }
 
-    const token = jwt.sign({ user }, process.env.JWT_SEC as string, {
+    const token = jwt.sign({ user: user.toObject() }, process.env.JWT_SEC as string, {
         expiresIn: "15d",
     });
 
@@ -74,7 +74,7 @@ export const addUserRole = TryCatch(async (req: AuthenticatedRequest, res) => {
         });
     }
 
-    const token = jwt.sign({ user }, process.env.JWT_SEC as string, { expiresIn: "15d", })
+    const token = jwt.sign({ user: user.toObject() }, process.env.JWT_SEC as string, { expiresIn: "15d", })
     res.json({ user, token });
 })
 

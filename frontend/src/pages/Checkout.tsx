@@ -194,6 +194,7 @@ const CheckOut = () => {
             const { orderId, amount } = order;
             try {
                 const stripe = await stripePromise;
+                if (amount && stripe) { /* placeholder for unused variables */ }
                 const { data } = await axios.post(
                     `${utilsService}/api/payment/stripe/create`,
                     {

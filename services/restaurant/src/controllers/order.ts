@@ -143,7 +143,7 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
 
     });
 
-    const deliveryFee = subtotal > 250 ? 49 : 0;
+    const deliveryFee = subtotal < 250 ? 49 : 0;
     const platformFee = 10;
     const totalAmount = subtotal + deliveryFee + platformFee;
 

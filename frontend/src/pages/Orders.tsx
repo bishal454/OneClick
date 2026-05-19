@@ -156,6 +156,21 @@ const OrderRow = ({
                 <p className="text-sm font-medium "> Order  #{order._id.slice(-6)}</p>
                 <span className="text-xs capitalize text-gray-500">{order.status}</span>
             </div>
+            <div className="mt-2 text-sm text-gray-600">
+                {order.items.map((item, i) => (
+
+                    <span key={i}>
+                        {item.name} x {item.quantity}
+                        {i < order.items.length - 1 && " , "}
+
+                    </span>
+                ))}
+            </div>
+            <div className="mt-2 flex justify-between text-sm font-medium">
+                <span >Total</span>
+                <span> ₹{order.totalAmount}</span>
+
+            </div>
         </div>
     );
 };

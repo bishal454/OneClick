@@ -149,7 +149,7 @@ const OrderSchema: Schema = new Schema({
 
     status: {
         type: String,
-        enum: ["placed", "preparing", "ready-for-pickup", "rider-assigned", "picked-up", "delivered", "cancelled"],
+        enum: ["placed", "accepted", "preparing", "ready-for-pickup", "rider-assigned", "picked-up", "delivered", "cancelled"],
         default: "placed"
     },
 

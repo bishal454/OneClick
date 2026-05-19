@@ -275,7 +275,7 @@ export const fetchRestaurantOrders = TryCatch(async (req: AuthenticatedRequest, 
 
 });
 
-const ALLOWED_STATUSES = ["placed", "accepted", "preparing", "ready-for-pickup", "rider-assigned"] as const;
+const ALLOWED_STATUSES = ["placed", "accepted", "preparing", "ready-for-pickup", "rider-assigned", "picked-up", "delivered", "cancelled"] as const;
 
 export const updateOrderStatus = TryCatch(async (req: AuthenticatedRequest, res) => {
     const user = req.user;

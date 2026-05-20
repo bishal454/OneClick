@@ -38,12 +38,10 @@ export const addRiderProfile = TryCatch(
             });
         }
 
-        const { data: uploadResult } = await axios.post(
+        const { data: uploadResult } = await axios.post<{ url: string }>(
             `${process.env.UTILS_SERVICE}/api/upload`,
             {
                 buffer: fileBuffer.content,
-
-
             },
         );
 
@@ -197,3 +195,70 @@ export const toggleRiderAvailability = TryCatch(async (req: AuthenticatedRequest
     });
 
 });
+
+export const acceptOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
+
+    const riderUserId = req.user?._id;
+    const { orderId } = req.params;
+
+    if (!riderUserId) {
+        return res.status(400).json({
+            message: "Please login",
+        });
+    }
+
+    const rider = await Rider.findOne({ userId: riderUserId, isAvailable: true });
+
+    if (!rider) {
+        return res.status(404).json({ message: "Rider not found" });
+    }
+    try {
+        const {data} = await axios.post<any>(
+            `${process.env.RESTAURANT_SERVICE}/api/order/assign/rider`,
+            {
+                orderId,
+                riderId: rider._id.toString(),
+                riderUserId: rider.userId,
+                riderName: rider.picture,
+                riderPhone: rider.phoneNumber,
+            },
+            {
+                headers: {
+                    "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
+                },
+            }
+        );
+
+
+        if(data.success){
+            const riderDetails=await Rider.findOneAndUpdate({
+                userId
+                :riderUserId,
+                isAvailable:true,
+            },{isAvailable:false,
+                new:true
+
+            });
+
+            res.json({message:"order accepted"});
+
+        }
+    } catch (error) {
+        res.status(400).json({
+            message:"order already taken",
+
+        });
+
+
+    }
+
+});
+
+export const fetchMyCurrentOrder=TryCatch(async(req:AuthenticatedRequest,res)=>{
+
+    const riderUserId=req.user?._id;
+    if(!riderUserId){
+
+
+    }
+})

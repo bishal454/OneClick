@@ -1,9 +1,9 @@
-import type { IOrder } from "../types"
-import { useState } from "react";
-import { ORDER_ACTIONS } from "../utils/orderflow";
 import axios from "axios";
-import { restaurantService } from "../main";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { restaurantService } from "../main";
+import type { IOrder } from "../types";
+import { ORDER_ACTIONS } from "../utils/orderflow";
 
 interface props {
     order: IOrder;
@@ -40,12 +40,35 @@ const statusColor = (status: string) => {
 
 const OrderCard = ({ order, onStatusUpdate }: props) => {
     const [loading, setLoading] = useState(false);
+    const[retryVisible,setRetryVisible]=useState(false);
+
 
     const action = ORDER_ACTIONS[order.status] || [];
+
+useEffect(()=>{
+
+    if(order.status!=="ready-for-pickup"){
+        setRetryVisible(false);
+        return;
+    }
+
+    const timer=setTimeout(() => {
+        setRetryVisible(true);
+
+    }, 10000);
+
+    return ()=> clearTimeout(timer);
+
+},[order.status]);
+
+
+
 
     const updateStatus = async (status: string) => {
         try {
             setLoading(true);
+            setRetryVisible(false);
+
             await axios.put(
                 `${restaurantService}/api/order/${order._id}`,
                 { status },
@@ -72,7 +95,7 @@ const OrderCard = ({ order, onStatusUpdate }: props) => {
                 </p>
 
                 <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusColor(order.status)}`}>
-                    {order.status.replace("-", " ")}
+                    {order.status.replace(/-/g, " ")}
                 </span>
             </div>
 
@@ -105,6 +128,19 @@ const OrderCard = ({ order, onStatusUpdate }: props) => {
                     ))}
                 </div>
             )}
+
+{order.status==="ready-for-pickup" && retryVisible && (
+
+    <div className="pt-2">
+        <button className="w-full rounded-lg border border[#e23899] py-2 text-xs font-semibold hover:bg-red-50 disabled:opacity-50"
+        onClick={()=>{updateStatus("ready-for-pickup")
+
+        }}>
+            Retry Ready for Pickup
+            </button>
+</div>
+)}
+
         </div>
     );
 };

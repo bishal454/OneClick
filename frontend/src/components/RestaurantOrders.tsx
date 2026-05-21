@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 
-import type { IOrder } from "../types"
-import { useSocket } from "../context/SocketContext"
-import audio from "../assets/restaurant.mp3";
 import axios from "axios";
+import audio from "../assets/restaurant.mp3";
+import { useSocket } from "../context/SocketContext";
 import { restaurantService } from "../main";
+import type { IOrder } from "../types";
 import OrderCard from "./OrderCard";
 
 
@@ -28,7 +28,7 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
 
 
     const { socket } = useSocket();
-    const audioRef = useRef<HTMLAudioElement>(null);
+    const audioRef = useRef<HTMLAudioElement | null >(null);
 
     useEffect(() => {
         audioRef.current = new Audio(audio);
@@ -104,6 +104,29 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
     },
         [socket, audioUnlocked]);
 
+
+
+        useEffect(()=>{
+
+            if(!socket){
+                return ;
+
+            }
+            const onupdateOrder=()=>{
+                fetchOrders()
+            }
+
+socket.on("order:rider_assigned", onupdateOrder);
+socket.on("order:update", onupdateOrder);
+
+return ()=>{
+    socket.off("order:rider_assigned", onupdateOrder);
+    socket.off("order:update", onupdateOrder);
+}
+
+        },[socket]);
+
+
     if (loading) {
 
         return <div className="text-gray-500">Loading orders...</div>
@@ -116,8 +139,7 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
 
     return (
         <div className="space-y-6">
-            {
-                !audioUnlocked && (
+            {!audioUnlocked && (
                     <div className=" bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
 

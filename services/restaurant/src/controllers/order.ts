@@ -449,6 +449,20 @@ export const assignRiderToOrder = TryCatch
 
         const { orderId, riderId, riderName, riderPhone } = req.body;
 
+
+
+
+const orderAvailable = await Order.findOne({ riderId, status: { $ne: "delivered" }, _id: { $ne: orderId } });
+
+
+        if(orderAvailable){
+            return res.status(400).json({
+                message:"You already have an order",
+
+            });
+
+        }
+
         const order = await Order.findById(orderId);
 
         if (order?.riderId !== null) {
@@ -470,7 +484,7 @@ export const assignRiderToOrder = TryCatch
             new: true
         });
         await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
-            event: "order:rider_assigned",
+            event: "order:rider-assigned",
             room: `user:${order.userId}`,
             payload: order,
 
@@ -501,6 +515,10 @@ export const assignRiderToOrder = TryCatch
                         });
     });
 
+
+
+
+
     export const getCurrentOrderForRider=TryCatch(async (req, res )=>{
 
         if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
@@ -509,17 +527,16 @@ export const assignRiderToOrder = TryCatch
             });
 
         }
-        const {riderId}=req.body;
+        const {riderId}=req.query;
         if(!riderId){
             return res.status(400).json({
                 message:"Rider id is required."
             });
         }
-const order =await Order.findOne({
-    riderId,
-    status:{$ne:"delivered"},
 
-}).populate("restaurantId");
+
+const query: any = { riderId: riderId as string, status: { $ne: "delivered" } };
+const order = await Order.findOne(query).populate("restaurantId");
 if(!order){
             return res.status(400).json({
                 message:"Order not found"
@@ -536,7 +553,7 @@ if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
             });
 
         }
-        const orderId=req.body;
+        const { orderId }=req.body;
         const order=await Order.findById
         (orderId);
         if(!order){

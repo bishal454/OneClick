@@ -16,6 +16,15 @@ export const connectRabbitMQ = async () => {
       durable: true,
     }
   )
+
+  await channel.assertQueue(process.env.ORDER_READY_QUEUE!,
+    {
+      durable: true,
+    }
+  )
+
+
+
   console.log("🐇 Connected to RabbitMQ(rider service) 🐰")
 }
 

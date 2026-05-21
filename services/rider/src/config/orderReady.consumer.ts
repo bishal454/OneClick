@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getChannel } from "./rabbitmq.js";
 import { Rider } from "../model/Rider.js";
+import { getChannel } from "./rabbitmq.js";
 
 
 export const startOrderReadyConsumer = async () => {
@@ -57,10 +57,10 @@ export const startOrderReadyConsumer = async () => {
         console.log(`Notifying rider userID :${riders.userId}`);
 
         try {
-          await axios.post(`${process.env.REALTIME_SERVICE}/api/internal/emit`, {
+          await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
 
 
-            event: "orer:available",
+            event: "order:available",
             room: `user:${riders.userId}`,
             payload: { orderId, restaurantId }
           }, {
@@ -72,7 +72,7 @@ export const startOrderReadyConsumer = async () => {
           console.log(`Notified rider ${riders.userId} successfully`)
 
         } catch (error) {
-          console.log(`Failed to Notifiy rider ${riders.userId}`);
+          console.log(`Failed to Notifiy rider ${riders.userId}` );
 
 
         }

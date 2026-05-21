@@ -1,9 +1,9 @@
-import { useParams } from "react-router-dom"
-import { useSocket } from "../context/SocketContext";
-import { useEffect, useState } from "react";
-import type { IOrder } from "../types";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSocket } from "../context/SocketContext";
 import { restaurantService } from "../main";
+import type { IOrder } from "../types";
 
 const OrderPage = () => {
     const { id } = useParams();
@@ -44,8 +44,10 @@ const OrderPage = () => {
         };
 
         socket.on("order:update", onOrderUpdate);
+         socket.on("order:rider-assigned", onOrderUpdate);
         return () => {
             socket.off("order:update", onOrderUpdate);
+            socket.off("order:rider-assigned", onOrderUpdate);
         };
 
     }, [socket]);

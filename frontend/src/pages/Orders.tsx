@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react"
-import type { IOrder } from "../types"
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
-import axios from "axios";
 import { restaurantService } from "../main";
+import type { IOrder } from "../types";
 
 const ACTIVE_STATUSES = [
     "placed",
     "accepted",
     "preparing",
-    "ready_for_pickup",
-    "rider_assigned",
-    "picked_up",
+    "ready-for-pickup",
+    "rider-assigned",
+    "picked-up",
 
 ]
 
@@ -54,10 +54,13 @@ const Order = () => {
 
 
         socket.on("order:update", onOrderUpdate);
+        socket.on("order:rider_assigned", onOrderUpdate);
         return () => {
             socket.off("order:update", onOrderUpdate);
+            socket.off("order:rider_assigned", onOrderUpdate);
         }
     }, [socket])
+
 
 
     if (loading) {

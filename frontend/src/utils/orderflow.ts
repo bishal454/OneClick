@@ -1,7 +1,5 @@
 export const ORDER_ACTIONS: Record<string, string[]> = {
-    placed: ["accepted"],
-    accepted: ["preparing"],
+    placed: ["accepted", "cancelled"],
+    accepted: ["preparing", "cancelled"],
     preparing: ["ready-for-pickup"],
-
-
 };

@@ -304,3 +304,8 @@ export const fetchSingleRestaurant = TryCatch(async (req, res) => {
 
 
 });
+
+export const getAllRestaurants = TryCatch(async (req, res) => {
+    const restaurants = await Restaurant.find().sort({ createdAt: -1 });
+    res.json({ success: true, count: restaurants.length, restaurants });
+});

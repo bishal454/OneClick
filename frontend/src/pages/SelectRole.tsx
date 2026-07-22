@@ -21,7 +21,7 @@ import axios from 'axios';
 
 // WHY: We need a type to restrict role values to valid options or null.
 // WHAT: Defining a Role union type with valid role strings and null.
-type Role = "customer" | "rider" | "seller" | null;
+type Role = "customer" | "rider" | "seller" | "admin" | null;
 
 // WHY: New users must select a role before using the app.
 // WHAT: Defining the SelectRole page component.
@@ -40,7 +40,7 @@ const SelectRole = () => {
 
     // WHY: We render a button for each role dynamically from this array.
     // WHAT: Defining the array of available roles.
-    const roles: Role[] = ['customer', 'rider', 'seller'];
+    const roles: Role[] = ['customer', 'rider', 'seller', 'admin'];
 
     // WHY: We need to send the selected role to the backend API.
     // WHAT: Defining the addRole async function for the API call.

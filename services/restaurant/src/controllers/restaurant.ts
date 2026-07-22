@@ -229,8 +229,11 @@ export const gtNearbyRestaurant = TryCatch(
         const query: any = {
             isVerified: true,
         }
-        if (search && typeof search === "string") {
-            query.name = { $regex: search, $options: "i" };
+        if (search && typeof search === "string" && search.trim() !== "") {
+            query.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } }
+            ];
         }
 
 

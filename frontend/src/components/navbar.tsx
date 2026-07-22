@@ -25,7 +25,7 @@ import { useEffect } from "react";
 
 // WHY: We need a map pin icon to display next to the user's location and the search bar in the navbar.
 // WHAT: Importing the BiMapPin icon component from the react-icons library (BoxIcons set).
-import { BiMapPin } from "react-icons/bi";
+import { BiMapPin, BiSearch } from "react-icons/bi";
 
 // WHY: We need a Navbar component that displays navigation links, search bar, and user location across all pages.
 // WHAT: Defining the Navbar functional component that renders the top navigation bar of the application.
@@ -151,11 +151,11 @@ const Navbar = () => {
                         {/* WHAT: Rendering a flex container with a search icon and a text input for the search functionality. */}
                         <div className="flex flex-1 items-center gap-2 px-3">
                             {/* WHY: The search icon provides a visual cue that this is a search input field. */}
-                            {/* WHAT: Rendering a BiMapPin icon in gray as a search indicator (could be replaced with a search icon). */}
-                            <BiMapPin className="h-4 w-4 text-gray-400" />
+                            {/* WHAT: Rendering a BiSearch icon as a search indicator. */}
+                            <BiSearch className="h-4 w-4 text-gray-400" />
                             {/* WHY: Users need a text input field to type their search query for finding restaurants. */}
                             {/* WHAT: Rendering a controlled text input that updates the search state on every change and fills the remaining space. */}
-                            <input type="text" placeholder="Search fro resturant " value={search}
+                            <input type="text" placeholder="Search for restaurant" value={search}
                                 onChange={(e) => setSearch(e.target.value)} className="w-full py-2 text-sm
                                  outline-none "/>
                         </div>

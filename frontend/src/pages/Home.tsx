@@ -10,9 +10,10 @@ import RestaurantCard from "../components/RestaurantCard";
 const Home = () => {
 
     const { location } = UseAppData();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const search = searchParams.get("search") || "";
+    const CATEGORIES = ["All", "Pizza", "Burger", "Vegan", "Dessert", "Healthy", "Beverages"];
     const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
 
     const [loading, setLoading] = useState(true);
@@ -86,8 +87,32 @@ const Home = () => {
     }
     return (
 
-        <div className=" mx-auto max-w-7xl px-4 py-6">
+        <div className=" mx-auto max-w-7xl px-4 py-6 space-y-6">
 
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                {CATEGORIES.map((cat) => {
+                    const isActive = search.toLowerCase() === cat.toLowerCase() || (search === "" && cat === "All");
+                    return (
+                        <button
+                            key={cat}
+                            onClick={() => {
+                                if (cat === "All") {
+                                    setSearchParams({});
+                                } else {
+                                    setSearchParams({ search: cat });
+                                }
+                            }}
+                            className={`whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition ${
+                                isActive
+                                    ? "bg-[#e32447] text-white shadow-md"
+                                    : "bg-white text-gray-600 shadow-sm hover:bg-red-50 hover:text-[#e32447]"
+                            }`}
+                        >
+                            {cat}
+                        </button>
+                    );
+                })}
+            </div>
 
             {restaurants.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

@@ -56,6 +56,17 @@ export const initSocket = (server: http.Server) => {
             socket.join(`restaurant:${user.restaurantId}`);
 
         }
+
+        // WHY: Allow clients to join specific rooms dynamically (e.g., order:123).
+        // WHAT: Listening for join and leave events to manage custom socket rooms.
+        socket.on("join", (room: string) => {
+            socket.join(room);
+        });
+
+        socket.on("leave", (room: string) => {
+            socket.leave(room);
+        });
+
         console.log(`User connected:${userId}`);
         console.log("Socket room: ", [...socket.rooms]);
 

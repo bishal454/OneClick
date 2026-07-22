@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import UserOrderMap from "../components/UserOrderMap";
 import { useSocket } from "../context/SocketContext";
 import { restaurantService } from "../main";
 import type { IOrder } from "../types";
@@ -44,13 +45,39 @@ const OrderPage = () => {
         };
 
         socket.on("order:update", onOrderUpdate);
-         socket.on("order:rider-assigned", onOrderUpdate);
+         socket.on("order:rider_assigned", onOrderUpdate);
         return () => {
             socket.off("order:update", onOrderUpdate);
-            socket.off("order:rider-assigned", onOrderUpdate);
+            socket.off("order:rider_assigned", onOrderUpdate);
         };
 
     }, [socket]);
+
+    useEffect(() => {
+    if(!socket || !id) return;
+    socket.emit("join", `order:${id}`);
+    return () => {
+        socket.emit("leave", `order:${id}`);
+    };
+}, [socket, id]);
+
+
+
+
+
+const [riderLocation, setRiderLocation] = useState<[number,number] | null>(null);
+useEffect(() => {
+  if(!socket)return;
+  const onRiderLocation=({latitude,longitude}:any)=>{
+    console.log("Rider Location:",latitude,longitude);
+    setRiderLocation([latitude,longitude]);
+  }
+socket.on("rider:location",onRiderLocation);
+  return () => {
+    socket.off("rider:location",onRiderLocation);
+  }
+}, [socket])
+
 
     if (loading) {
         return <div className="flex-center text-gray-500 ">Loading Orders......</div>;
@@ -123,6 +150,19 @@ const OrderPage = () => {
                 <p className="text-xs text-gray-500">Payment Method:{order.paymentMethod}</p>
                 <p className="text-xs text-gray-500">Payment Status:{order.paymentStatus}</p>
             </div>
+
+
+            {(order.status ==="rider-assigned" || order.status==="picked-up") &&( riderLocation ?
+                  <UserOrderMap
+                  riderLocation={riderLocation}
+                  deliveryLocation={[
+                    order.deliveryAddress.latitude!,
+                    order.deliveryAddress.longitude!]}
+                  />
+                :
+                    <p>Waiting for rider location </p>
+                )}
+
         </div>
 
 

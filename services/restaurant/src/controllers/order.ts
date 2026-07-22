@@ -591,6 +591,7 @@ await order.save();
         );
         return res.json({
             message:"Order updated successfully",
+            status: order.status,
         });
 }
 if(order.status==="picked-up"){
@@ -623,6 +624,7 @@ await order.save();
         );
         return res.json({
             message:"Order updated successfully",
+            status: order.status,
         });
 }
     })

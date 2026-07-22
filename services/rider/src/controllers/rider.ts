@@ -340,6 +340,11 @@ const {data}=await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update
 })
 const result=data as any;
 
+        if (result.status === "delivered") {
+            rider.isAvailable = true;
+            await rider.save();
+        }
+
 res.json({
     message:result.message,
 

@@ -94,7 +94,7 @@ onStatusUpdate();
             <div className="space-y-2">
                 {order.status=== "rider-assigned" && (
                     <button onClick={()=>updateStatus()}
-                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg py-2 font-semibold">Reached Restaurant </button>
+                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg py-2 font-semibold">Pick Up Order</button>
                 )}
 
                 {order.status=== "picked-up" && (

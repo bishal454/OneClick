@@ -11,10 +11,10 @@ import type { IOrder } from "../types";
 
 
 
-declare module "leaflet"{
+declare module "leaflet" {
     namespace Routing{
-        function control(option:any):any;
-        function osrmv1(option:any):any;
+        function control(options:any):any;
+        function osrmv1(options?:any):any;
 
     }
 }
@@ -23,14 +23,15 @@ const riderIcon=new L.DivIcon({
     html:"🛵",
     iconSize:[30,30],
     className:"",
-})
+});
 
 
 const deliveryIcon=new L.DivIcon({
     html:"🏦",
     iconSize:[30,30],
     className:"",
-})
+});
+
 
 interface Props {
     order:IOrder;
@@ -104,7 +105,7 @@ useEffect(()=>{
 
             setRiderLocation([latitude,longitude]);
 
-            axios.post(`${realtimeService}/api/v1internal/emit`,
+            axios.post(`${realtimeService}/api/v1/internal/emit`,
                 {
                     event:"rider:location",
                     room:`user:${order.userId}`,

@@ -11,7 +11,7 @@ const Account = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.setItem("token", " ");
+        localStorage.removeItem("token");
         setUser(null);
         setIsAuth(false);
         navigate("/login");

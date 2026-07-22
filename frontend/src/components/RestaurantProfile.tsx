@@ -216,7 +216,6 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
                                 </button>
                             )}
 
-
                     </div>
                 </div>
 

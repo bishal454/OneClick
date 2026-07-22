@@ -544,6 +544,50 @@ if(!order){
         }
 res.json(order);
     });
+    export const getRestaurantStats = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const user = req.user;
+    const { restaurantId } = req.params;
+
+    if (!user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!user.restaurantId || user.restaurantId !== restaurantId) {
+        return res.status(403).json({ message: "Forbidden: You do not own this restaurant" });
+    }
+
+    const stats = await Order.aggregate([
+        { $match: { restaurantId, paymentStatus: "completed" } },
+        {
+            $group: {
+                _id: null,
+                totalRevenue: { $sum: "$subtotal" },
+                totalOrders: { $sum: 1 },
+                completedDeliveries: {
+                    $sum: { $cond: [{ $eq: ["$status", "delivered"] }, 1, 0] }
+                },
+                averageOrderValue: { $avg: "$subtotal" },
+            }
+        }
+    ]);
+
+    const recentOrders = await Order.find({ restaurantId, paymentStatus: "completed" })
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .select("_id items subtotal totalAmount status createdAt");
+
+    const result = stats[0] || { totalRevenue: 0, totalOrders: 0, completedDeliveries: 0, averageOrderValue: 0 };
+
+    return res.json({
+        success: true,
+        totalRevenue: result.totalRevenue,
+        totalOrders: result.totalOrders,
+        completedDeliveries: result.completedDeliveries,
+        averageOrderValue: Math.round(result.averageOrderValue || 0),
+        recentOrders,
+    });
+});
+
     export const  updateOrderStatusRider=TryCatch(async(req,res)=>{
 
 if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {

@@ -55,7 +55,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
     // WHY: We need to display the user's city name in the Navbar and show a loading message while fetching.
     // WHAT: Initializing city state with a "Fetching Location..." message that will be replaced once location is determined.
-    const [city, setCity] = useState("Fecthing Location..... ");
+    const [city, setCity] = useState("Fetching Location...");
 
 
     // WHY: We need an async function to fetch the current user's profile from the backend when the app loads.

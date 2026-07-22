@@ -80,7 +80,7 @@ socket.on("rider:location",onRiderLocation);
 
 
     if (loading) {
-        return <div className="flex-center text-gray-500 ">Loading Orders......</div>;
+        return <div className="flex min-h-[60vh] items-center justify-center text-gray-500">Loading Order...</div>;
 
 
 
